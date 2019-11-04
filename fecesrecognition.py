@@ -7,10 +7,11 @@ import _pickle as pickle
 import random
 import os
 import matplotlib.pyplot as plt
+import sys
 
 # Feature extractor
 def extract_features(image_path, vector_size=32):
-    image = imread(image_path)
+    image = imread(image_path, 1)
     try:
         # Using KAZE, cause SIFT, ORB and other was moved to additional module
         # which is adding addtional pain during install
@@ -80,12 +81,14 @@ class Matcher(object):
         return nearest_img_paths, img_distances[nearest_ids].tolist()
 
 def show_img(path):
-    img = imread(path)
+    img = imread(path, 1)
     plt.imshow(img)
     plt.show()
     
 def run():
-    images_path = 'D:\_ALinGEO\Tubes2Algeo\PINS\pins_alexandra daddario'
+    images_path = os.path.abspath(__file__)
+    relative_path = '\PINS\pins_alexandra daddario'
+    images_path = os.path.dirname(images_path) + relative_path
     files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
     # getting 3 random images 
     sample = random.sample(files, 3)
@@ -94,9 +97,7 @@ def run():
 
     ma = Matcher('features.pck')
     
-    cnt = 0
     for s in sample:
-        cnt+=1
         print( 'Query image ==========================================')
         show_img(s)
         names, match = ma.match(s, topn=3)
@@ -106,6 +107,5 @@ def run():
             # more they similar, thus we subtruct it from 1 to get match value
             print( 'Match %s' % (1-match[i]))
             show_img(os.path.join(images_path, names[i]))
-        if (cnt==3): 
-            break
+            
 run()
