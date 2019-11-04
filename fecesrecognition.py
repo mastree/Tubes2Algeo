@@ -8,6 +8,7 @@ import random
 import os
 import matplotlib.pyplot as plt
 import sys
+import math
 
 # Feature extractor
 def extract_features(image_path, vector_size=32):
@@ -66,16 +67,49 @@ class Matcher(object):
         self.matrix = np.array(self.matrix)
         self.names = np.array(self.names)
 
-    def cos_cdist(self, vector):
+    def cosine_distance(vector1, vector2):
+        v = vector2.reshape(-1)
+        vself = vector1.reshape(-1)
+        
+        res = 0
+        v_norm = 0
+        vself_norm = 0
+        for i in range(32*64): # There are 32*64 keypoints
+            res += v[i] * vself[i]
+            v_norm += v[i] * v[i]
+            vself_norm += vself[i] * vself[i]
+        
+        v_norm = math.sqrt(v_norm)
+        vself_norm = math.sqrt(vself_norm)
+        return res / (v_norm * vself_norm)
+
+    def cosine_vector(self, vector):
         # getting cosine distance between search image and images database
         v = vector.reshape(1, -1)
-        return scipy.spatial.distance.cdist(self.matrix, v, 'cosine').reshape(-1)
+
+        cosine_result = np.arange(self.matrix.shape[0], dtype=float)
+    #    print('[')
+        i = 0
+        for vtemp in self.matrix:
+            # print(Matcher.cosine_distance(vtemp, v))
+            cosine_result[i] = Matcher.cosine_distance(vtemp, v)
+            # print('=> ',cosine_result[i])
+            i+=1
+
+    #    print(']')
+        return cosine_result.reshape(-1)
+    #    return scipy.spatial.distance.cdist(self.matrix, v, 'cosine').reshape(-1)
 
     def match(self, image_path, topn=5):
         features = extract_features(image_path)
-        img_distances = self.cos_cdist(features)
+        img_distances = self.cosine_vector(features)
+        
+        # print('[')
+        # for dis in img_distances:
+        #     print(dis,' <= Ini yang sample')
+        # print(']')
         # getting top 5 records
-        nearest_ids = np.argsort(img_distances)[:topn].tolist()
+        nearest_ids = np.argsort(-img_distances)[:topn].tolist()
         nearest_img_paths = self.names[nearest_ids].tolist()
 
         return nearest_img_paths, img_distances[nearest_ids].tolist()
@@ -87,7 +121,7 @@ def show_img(path):
     
 def run():
     images_path = os.path.abspath(__file__)
-    relative_path = '\PINS\pins_alexandra daddario'
+    relative_path = '\PINS\sampleTest'
     images_path = os.path.dirname(images_path) + relative_path
     files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
     # getting 3 random images 
@@ -105,7 +139,7 @@ def run():
         for i in range(3):
             # we got cosine distance, less cosine distance between vectors
             # more they similar, thus we subtruct it from 1 to get match value
-            print( 'Match %s' % (1-match[i]))
+            print( 'Match %s' % (match[i]))
             show_img(os.path.join(images_path, names[i]))
             
 run()
