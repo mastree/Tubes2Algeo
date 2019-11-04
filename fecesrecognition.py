@@ -142,7 +142,7 @@ def show_img(path):
     
 def run():
     images_path = os.path.abspath(__file__)
-    relative_path = '\PINS\sampleTest'
+    relative_path = '\sampleTest'
     images_path = os.path.dirname(images_path) + relative_path
     files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
     # getting 3 random images 
@@ -166,7 +166,7 @@ def run():
             # print(names[i])
             # we got euclidean distance, euclidean distance between vectors
             print('Euclidean======================================')
-            print( 'Match %s' % (match2[i]))
+            print( 'Distance %s' % (match2[i]))
             show_img(os.path.join(images_path, names2[i]))
             # print(names2[i])
 
