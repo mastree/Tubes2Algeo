@@ -199,66 +199,68 @@ def run_Reference_extractor():
 # run_DataSet_extractor()
 # run_Reference_extractor()
 
-# images_path = os.path.abspath(__file__)
-# relative_path = '\Data\\DataUji\\pins_alexandra daddarioTest'
-# images_path = os.path.dirname(images_path)
-# # print(images_path)
+images_path = os.path.abspath(__file__)
+relative_path = 'Data\\DataUji\\pins_alexandra daddarioTest\\alexandra daddario115.jpg'
+images_path = os.path.dirname(images_path)
+# print(images_path)
 
-# RefSet = Matcher('Ref_features.pck')
+RefSet = Matcher('Ref_features.pck')
 # TestFiles = images_path + relative_path
-# print(TestFiles)
+TestFiles = os.path.join(images_path, relative_path)
+print(TestFiles)
 
 # files = [os.path.join(TestFiles, p) for p in sorted(os.listdir(TestFiles))]
 
 # sample = random.sample(files, 1)
 
 # for TestFiles in sample:
-#     print(TestFiles)
+# print(TestFiles)
+# break
+print( 'Query image ==========================================')
+show_img(TestFiles)
+names, match = RefSet.match_cosine(TestFiles, topn=3)
+names2, match2 = RefSet.match_euclidean(TestFiles, topn=3)
+print( 'Result images ========================================')
+for i in range(3):
+    # we got cosine distance, cosine distance between vectors
+    print('Cosine======================================')
+    print( 'Match %s' % (match[i]))
+    show_img(names[i])
+    # print(names[i])
+    # we got euclidean distance, euclidean distance between vectors
+    print('Euclidean======================================')
+    print( 'Distance %s' % (match2[i]))
+    show_img(names2[i])
+    # print(names2[i])
+
+
+# images_path = os.path.abspath(__file__)
+# relative_path = '\sampleTest'
+# images_path = os.path.dirname(images_path) + relative_path
+# files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
+
+# # getting 3 random images 
+# sample = random.sample(files, 1)
+# # batch_extractor(images_path, "features.pck")
+
+
+# ma = Matcher('features.pck')
+
+# for s in sample:
+#     print(s)
 #     print( 'Query image ==========================================')
-#     show_img(TestFiles)
-#     names, match = RefSet.match_cosine(TestFiles, topn=3)
-#     names2, match2 = RefSet.match_euclidean(TestFiles, topn=3)
+#     show_img(s)
+#     names, match = ma.match_cosine(s, topn=3)
+#     names2, match2 = ma.match_euclidean(s, topn=3)
 #     print( 'Result images ========================================')
 #     for i in range(3):
 #         # we got cosine distance, cosine distance between vectors
 #         print('Cosine======================================')
 #         print( 'Match %s' % (match[i]))
 #         show_img(names[i])
-#         # print(names[i])
+#         print(names[i])
 #         # we got euclidean distance, euclidean distance between vectors
 #         print('Euclidean======================================')
-#         print( 'Match %s' % (1 - match2[i]))
+#         print( 'Distance %s' % (match2[i]))
 #         show_img(names2[i])
-#         # print(names2[i])
-
-
-images_path = os.path.abspath(__file__)
-relative_path = '\sampleTest'
-images_path = os.path.dirname(images_path) + relative_path
-files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
-
-# getting 3 random images 
-sample = random.sample(files, 1)
-# batch_extractor(images_path, "features.pck")
-
-
-ma = Matcher('features.pck')
-
-for s in sample:
-    print(s)
-    print( 'Query image ==========================================')
-    show_img(s)
-    names, match = ma.match_cosine(s, topn=3)
-    names2, match2 = ma.match_euclidean(s, topn=3)
-    print( 'Result images ========================================')
-    for i in range(3):
-        # we got cosine distance, cosine distance between vectors
-        print('Cosine======================================')
-        print( 'Match %s' % (match[i]))
-        show_img(names[i])
-        print(names[i])
-        # we got euclidean distance, euclidean distance between vectors
-        print('Euclidean======================================')
-        print( 'Distance %s' % (match2[i]))
-        show_img(names2[i])
-        print(names2[i])
+#         print(names2[i])
