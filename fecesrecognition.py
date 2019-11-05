@@ -26,6 +26,9 @@ def extract_features(image_path, vector_size=32):
         # computing descriptors vector
         kps, dsc = alg.compute(image, kps)
         # Flatten all of them in one big vector - our feature vector
+        if dsc is None:
+            return None
+        
         dsc = dsc.flatten()
         # Making descriptor of same size
         # Descriptor vector size is 64
@@ -41,14 +44,18 @@ def extract_features(image_path, vector_size=32):
     return dsc
 
 
-def batch_extractor(images_path, pickled_db_path="features.pck"):
-    files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
+def batch_extractor(images_path, pickled_db_path):
+    folder = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
 
     result = {}
-    for f in files:
-        print( 'Extracting features from image %s' % f)
-        name = f.split('/')[-1].lower()
-        result[name] = extract_features(f)
+    for fold in folder:
+        files = [os.path.join(fold, p) for p in sorted(os.listdir(fold))] 
+        for f in files:
+            print( 'Extracting features from image %s' % f)
+            name = f.split('/')[-1].lower()
+            temp = extract_features(f)
+            if temp is not None:
+                result[name] = temp
     
     # saving all our feature vectors in pickled file
     with open(pickled_db_path, 'wb') as fp:
@@ -140,34 +147,44 @@ def show_img(path):
     plt.imshow(img)
     plt.show()
     
-def run():
-    images_path = os.path.abspath(__file__)
-    relative_path = '\sampleTest'
-    images_path = os.path.dirname(images_path) + relative_path
-    files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
+def run_DataSet_extractor():
+    Data_images_path = os.path.abspath(__file__)
+    relative_path = '\\Data\\DataUji'
+    Data_images_path = os.path.dirname(Data_images_path) + relative_path
+    Data_files = [os.path.join(Data_images_path, p) for p in sorted(os.listdir(Data_images_path))]
+    batch_extractor(Data_images_path, "Data_features.pck")
+    
+def run_Reference_extractor():
+    Ref_images_path = os.path.abspath(__file__)
+    relative_path = '\\Data\\Referensi'
+    Ref_images_path = os.path.dirname(Ref_images_path) + relative_path
+    Ref_files = [os.path.join(Ref_images_path, p) for p in sorted(os.listdir(Ref_images_path))]
     # getting 3 random images 
-    sample = random.sample(files, 3)
-    
-    batch_extractor(images_path)
+    # sample = random.sample(files, 3)
+    batch_extractor(Ref_images_path, "Ref_features.pck")
 
-    ma = Matcher('features.pck')
-    
-    for s in sample:
-        print( 'Query image ==========================================')
-        show_img(s)
-        names, match = ma.match_cosine(s, topn=3)
-        names2, match2 = ma.match_euclidean(s, topn=3)
-        print( 'Result images ========================================')
-        for i in range(3):
-            # we got cosine distance, cosine distance between vectors
-            print('Cosine======================================')
-            print( 'Match %s' % (match[i]))
-            show_img(os.path.join(images_path, names[i]))
-            # print(names[i])
-            # we got euclidean distance, euclidean distance between vectors
-            print('Euclidean======================================')
-            print( 'Distance %s' % (match2[i]))
-            show_img(os.path.join(images_path, names2[i]))
-            # print(names2[i])
 
-run()
+    # ma = Matcher('features.pck')
+    
+    # for s in sample:
+    #     print( 'Query image ==========================================')
+    #     show_img(s)
+    #     names, match = ma.match_cosine(s, topn=3)
+    #     names2, match2 = ma.match_euclidean(s, topn=3)
+    #     print( 'Result images ========================================')
+    #     for i in range(3):
+    #         # we got cosine distance, cosine distance between vectors
+    #         print('Cosine======================================')
+    #         print( 'Match %s' % (match[i]))
+    #         show_img(os.path.join(images_path, names[i]))
+    #         # print(names[i])
+    #         # we got euclidean distance, euclidean distance between vectors
+    #         print('Euclidean======================================')
+    #         print( 'Distance %s' % (match2[i]))
+    #         show_img(os.path.join(images_path, names2[i]))
+    #         # print(names2[i])
+
+# Run these to get the file packages
+# run_DataSet_extractor()
+# run_Reference_extractor()
+
