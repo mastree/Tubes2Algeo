@@ -11,6 +11,7 @@ methods=[
 ]
 class Window(Tk):
     def __init__(self):
+        # from gui2 import Window
         super(Window, self).__init__()
         self.n=0
         self.v=0

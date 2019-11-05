@@ -14,10 +14,8 @@ import math
 def extract_features(image_path, vector_size=32):
     image = imread(image_path, 1)
     try:
-        # Using KAZE, cause SIFT, ORB and other was moved to additional module
-        # which is adding addtional pain during install
         alg = cv2.KAZE_create()
-        # Dinding image keypoints
+        # Finding image keypoints
         kps = alg.detect(image)
         # Getting first 32 of them. 
         # Number of keypoints is varies depend on image size and color pallet
@@ -26,7 +24,7 @@ def extract_features(image_path, vector_size=32):
         # computing descriptors vector
         kps, dsc = alg.compute(image, kps)
         # Flatten all of them in one big vector - our feature vector
-        if dsc is None:
+        if dsc is None: # Handling NULL object
             return None
         
         dsc = dsc.flatten()
@@ -107,7 +105,7 @@ class Matcher(object):
 
         return euclidean_result.reshape(-1)
 
-    def match_euclidean(self, image_path, topn=5):
+    def match_euclidean(self, image_path, topn):
         features = extract_features(image_path)
         img_distances = self.euclidean_vector(features)
 
@@ -133,7 +131,7 @@ class Matcher(object):
         return res / (v_norm * vself_norm)
 
     def cosine_vector(self, vector):
-        # getting cosine distance between search image and images database
+        # getting cosine similarity between search image and images database
         v = vector.reshape(-1)
 
         cosine_result = np.arange(self.matrix.shape[0], dtype=float)
@@ -144,7 +142,7 @@ class Matcher(object):
 
         return cosine_result.reshape(-1)
 
-    def match_cosine(self, image_path, topn=5):
+    def match_cosine(self, image_path, topn):
         features = extract_features(image_path)
         img_distances = self.cosine_vector(features)
         
@@ -174,93 +172,34 @@ def run_Reference_extractor():
     # sample = random.sample(files, 3)
     batch_extractor(Ref_images_path, "Ref_features.pck")
 
-
-    # ma = Matcher('features.pck')
-    
-    # for s in sample:
-    #     print( 'Query image ==========================================')
-    #     show_img(s)
-    #     names, match = ma.match_cosine(s, topn=3)
-    #     names2, match2 = ma.match_euclidean(s, topn=3)
-    #     print( 'Result images ========================================')
-    #     for i in range(3):
-    #         # we got cosine distance, cosine distance between vectors
-    #         print('Cosine======================================')
-    #         print( 'Match %s' % (match[i]))
-    #         show_img(os.path.join(images_path, names[i]))
-    #         # print(names[i])
-    #         # we got euclidean distance, euclidean distance between vectors
-    #         print('Euclidean======================================')
-    #         print( 'Distance %s' % (match2[i]))
-    #         show_img(os.path.join(images_path, names2[i]))
-    #         # print(names2[i])
-
 # Run these to get the file packages
 # run_DataSet_extractor()
 # run_Reference_extractor()
 
-images_path = os.path.abspath(__file__)
-relative_path = 'Data\\DataUji\\pins_alexandra daddarioTest\\alexandra daddario115.jpg'
-images_path = os.path.dirname(images_path)
-# print(images_path)
+def find_match(TestFiles, metode, T):
+    RefSet = Matcher("Ref_features.pck")
+    print(TestFiles)
+    print( 'Query image ==========================================')
+    show_img(TestFiles)
+    if (metode==2): 
+        names, match = RefSet.match_cosine(TestFiles, T)
+        print( 'Result images ========================================')
+        for i in range(T):
+            # we got cosine distance, cosine distance between vectors
+            print('Cosine======================================')
+            print( 'Match %s' % (match[i]))
+            show_img(names[i])
+            print(names[i])
 
-RefSet = Matcher('Ref_features.pck')
-# TestFiles = images_path + relative_path
-TestFiles = os.path.join(images_path, relative_path)
-print(TestFiles)
+    if (metode==1):
+        names2, match2 = RefSet.match_euclidean(TestFiles, T)
+        print( 'Result images ========================================')
+        for i in range(T):
+            # we got euclidean distance, euclidean distance between vectors
+            print('Euclidean======================================')
+            print( 'Distance %s' % (match2[i]))
+            show_img(names2[i])
+            print(names2[i])
 
-# files = [os.path.join(TestFiles, p) for p in sorted(os.listdir(TestFiles))]
-
-# sample = random.sample(files, 1)
-
-# for TestFiles in sample:
-# print(TestFiles)
-# break
-print( 'Query image ==========================================')
-show_img(TestFiles)
-names, match = RefSet.match_cosine(TestFiles, topn=3)
-names2, match2 = RefSet.match_euclidean(TestFiles, topn=3)
-print( 'Result images ========================================')
-for i in range(3):
-    # we got cosine distance, cosine distance between vectors
-    print('Cosine======================================')
-    print( 'Match %s' % (match[i]))
-    show_img(names[i])
-    # print(names[i])
-    # we got euclidean distance, euclidean distance between vectors
-    print('Euclidean======================================')
-    print( 'Distance %s' % (match2[i]))
-    show_img(names2[i])
-    # print(names2[i])
-
-
-# images_path = os.path.abspath(__file__)
-# relative_path = '\sampleTest'
-# images_path = os.path.dirname(images_path) + relative_path
-# files = [os.path.join(images_path, p) for p in sorted(os.listdir(images_path))]
-
-# # getting 3 random images 
-# sample = random.sample(files, 1)
-# # batch_extractor(images_path, "features.pck")
-
-
-# ma = Matcher('features.pck')
-
-# for s in sample:
-#     print(s)
-#     print( 'Query image ==========================================')
-#     show_img(s)
-#     names, match = ma.match_cosine(s, topn=3)
-#     names2, match2 = ma.match_euclidean(s, topn=3)
-#     print( 'Result images ========================================')
-#     for i in range(3):
-#         # we got cosine distance, cosine distance between vectors
-#         print('Cosine======================================')
-#         print( 'Match %s' % (match[i]))
-#         show_img(names[i])
-#         print(names[i])
-#         # we got euclidean distance, euclidean distance between vectors
-#         print('Euclidean======================================')
-#         print( 'Distance %s' % (match2[i]))
-#         show_img(names2[i])
-#         print(names2[i])
+# Contoh find_match
+find_match("D:/_ALinGEO/Tubes2Algeo/Data/DataUji/pins_alexandra daddarioTest/alexandra daddario25.jpg", 1, 2)
