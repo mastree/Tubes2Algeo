@@ -202,4 +202,4 @@ def find_match(TestFiles, metode, T):
             print(names2[i])
 
 # Contoh find_match
-find_match("D:/_ALinGEO/Tubes2Algeo/Data/DataUji/pins_alexandra daddarioTest/alexandra daddario25.jpg", 1, 2)
+# find_match("D:/_ALinGEO/Tubes2Algeo/Data/DataUji/pins_alexandra daddarioTest/alexandra daddario25.jpg", 1, 2)

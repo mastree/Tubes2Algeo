@@ -1,5 +1,7 @@
+import fecesrecognition
 import tkinter as tk
 # import fecesrecognition as fr
+from fecesrecognition import find_match
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
@@ -16,14 +18,15 @@ class Window(Tk):
         self.n=0
         self.v=0
         self.filename=""
-        self.title("Input Gui")
+        self.title("Face Recognition")
         self.labelFrame=ttk.LabelFrame(self,text = "Open an Image")
         self.labelFrame.grid(row=0,column=0)
 
         # inputing number of matches 
+        ttk.Label(self.labelFrame,text = "Put number of expected matches here").grid(row=3)
         self.entry1=Entry(self.labelFrame)
-        self.entry1.insert(0,"Put number of expected matches here")
-        self.entry1.grid(row=3,column=0)
+        self.entry1.insert(0,"")
+        self.entry1.grid(row=4,column=0)
         
         # radio button for method
         self.method=IntVar()
@@ -44,6 +47,11 @@ class Window(Tk):
         if(s1.isdigit()):
             s1=int(s1)
             print(s1," ",s2," ",self.filename)
+            T = int(s1)
+            metode = int(s2)
+            # ini contoh doang
+            # bikin di dalem gui-nya rick
+            # find_match(self.filename, metode, T)
         else:
             messagebox.showerror("Error","Number must be an integer! please re-input")
 

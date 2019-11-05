@@ -10,4 +10,4 @@ import gui2
 from gui2 import *
 
 tkintil = Window()
-Window.__init__(tkintil)
+tkintil.mainloop()
