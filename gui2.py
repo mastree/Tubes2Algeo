@@ -50,7 +50,7 @@ class Window(Tk):
     def onClicked(self):
         s2=self.method.get()
         self.labelFrame.pack_forget()
-        # self.photos,self.names,self.matches=fr.run(s2,self.filename)
+        # self.photos=fr.run(s2,self.filename)
         
         img1= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Aaron PaulTest\Aaron Paul2_293.jpg"))
         img2= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Amaury NolascoTest\Amaury Nolasco6.jpg"))
@@ -63,29 +63,29 @@ class Window(Tk):
     def showResult(self,imageNth):
         
         self.label2=Label(self,image=self.photos[imageNth-1],bg='black')
-        self.label2.grid(row=0,column=0,columnspan=3,sticky=N+S+W+E)
+        self.label2.grid(row=0,column=0,sticky=N+S+W+E)
 
         self.textLabel=Label(self,text="Ranking : "+str(imageNth),bg='black',fg='white')
-        self.textLabel.grid(row=1,column=0,columnspan=3,sticky=N+S+W+E)
+        self.textLabel.grid(row=1,column=0,sticky=N+S+W+E)
         
         if(imageNth== len(self.photos)):
-            self.buttonNext=Button(self ,text="-->",bg='black',fg='white',command=lambda:self.showResult(1))
-            self.buttonBack=Button(self ,text="<--",bg='black',fg='white',command=lambda:self.showResult(imageNth-1))
+            self.buttonNext=Button(self ,text="Next",bg='black',fg='white',command=lambda:self.showResult(1))
+            self.buttonBack=Button(self ,text="Prev",bg='black',fg='white',command=lambda:self.showResult(imageNth-1))
         else: 
             if(imageNth == 1):
-                self.buttonNext=Button(self ,text="-->",bg='black',fg='white',command=lambda:self.showResult(imageNth+1))
-                self.buttonBack=Button(self ,text="<--",bg='black',fg='white',command=lambda:self.showResult(len(self.photos)))
+                self.buttonNext=Button(self ,text="Next",bg='black',fg='white',command=lambda:self.showResult(imageNth+1))
+                self.buttonBack=Button(self ,text="Prev",bg='black',fg='white',command=lambda:self.showResult(len(self.photos)))
             else:
-                self.buttonNext=Button(self ,text="-->",bg='black',fg='white',command=lambda:self.showResult(imageNth+1))
-                self.buttonBack=Button(self ,text="<--",bg='black',fg='white',command=lambda:self.showResult(imageNth-1))
+                self.buttonNext=Button(self ,text="Next",bg='black',fg='white',command=lambda:self.showResult(imageNth+1))
+                self.buttonBack=Button(self ,text="Prev",bg='black',fg='white',command=lambda:self.showResult(imageNth-1))
         
         self.buttonExit=Button(self ,text= "Exit",bg='black',fg='white',command=self.quit)    
         self.buttonBack.grid(row=2,column=0,sticky=N+S+W+E)
-        self.buttonExit.grid(row=2,column=1,sticky=N+S+W+E)
-        self.buttonNext.grid(row=2,column=2,sticky=N+S+W+E)
+        self.buttonExit.grid(row=3,column=0,sticky=N+S+W+E)
+        self.buttonNext.grid(row=4,column=0,sticky=N+S+W+E)
      
 if __name__=='__main__':
     window = Window()
-    Grid.rowconfigure(window,0)
-    Grid.columnconfigure(window,0)
+    Grid.rowconfigure(window,0,weight=1)
+    Grid.columnconfigure(window,0,weight=1)
     window.mainloop()
