@@ -17,7 +17,10 @@ class Window(Tk):
         self.title("Input Gui")
         self.build()
 
-    def build(self):    
+    def build(self):
+        self.filename=None
+        self.spinLabel=None
+
         self.labelFrame=ttk.LabelFrame(self,text = "Open an Image")
         self.labelFrame.grid(row=0,column=0,sticky=N+S+W+E)
         
@@ -53,26 +56,28 @@ class Window(Tk):
         
 
     def onClicked(self):
-        s2=self.method.get()
-        self.labelFrame.pack_forget()
+        if(self.filename is not None and self.spinLabel.get().isdigit()):
+            s2=self.method.get()
+            self.labelFrame.pack_forget()
 
-        # self.photos,self.matches,self.tested=fr.run(self.filename,s2,int(self.spinLabel.get()))
-        
-        img1= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Aaron PaulTest\Aaron Paul2_293.jpg"))
-        img2= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Amaury NolascoTest\Amaury Nolasco6.jpg"))
-        img3= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Alvaro MorteTest\Alvaro Morte16_879.jpg"))
-        self.tested=img1
-        self.photos=[img1,img2,img3,img2]
-        self.matches=[1,2,3,4]
-        self.showResult(1)
-        
+            # self.photos,self.matches,self.tested=fr.run(self.filename,s2,int(self.spinLabel.get()))
+            
+            img1= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Aaron PaulTest\Aaron Paul2_293.jpg"))
+            img2= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Amaury NolascoTest\Amaury Nolasco6.jpg"))
+            img3= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Alvaro MorteTest\Alvaro Morte16_879.jpg"))
+            self.tested=img1
+            self.photos=[img1,img2,img3,img2]
+            self.matches=[1,2,3,4]
+            self.showResult(1)
+        else:
+            messagebox.showerror('Error','Please re-check your input')        
     def showResult(self,imageNth):
         
         self.label1=Label(self,image=self.tested,bg='black')
-        self.label1.grid(row=0,column=0,sticky=N+S+W)
+        self.label1.grid(row=0,column=0,sticky=N+S+W+E)
 
         self.label2=Label(self,image=self.photos[imageNth-1],bg='black')
-        self.label2.grid(row=0,column=1,sticky=N+S+E)
+        self.label2.grid(row=0,column=1,sticky=N+S+E+W)
 
         self.textLabel=Label(self,text="Ranking : "+str(imageNth)+" ("+str(self.matches[imageNth-1])+")",bg='black',fg='white')
         self.textLabel.grid(row=1,column=0,columnspan=2,sticky=N+S+W+E)
