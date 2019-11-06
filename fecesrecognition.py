@@ -179,12 +179,16 @@ def run_Reference_extractor():
 # run_Reference_extractor()
 
 def find_match(TestFiles, metode, T):
-    RefSet = Matcher("Ref_features.pck")
-    print(TestFiles)
-    print( 'Query image ==========================================')
+    RefSet = Matcher("features.pck")
+    tested_image = imread(path, 1)
+    # print(TestFiles)
+    # print( 'Query image ==========================================')
     # show_img(TestFiles)
     if (metode==2): 
-        return RefSet.match_cosine(TestFiles, T)
+        names, match = RefSet.match_cosine(TestFiles, T)
+
+        all_image = [imread(path, 1) for path in names]
+        return all_image, match, tested_image
         # names, match = RefSet.match_cosine(TestFiles, T)
         # print( 'Result images ========================================')
         # for i in range(T):
@@ -195,7 +199,10 @@ def find_match(TestFiles, metode, T):
         #     print(names[i])
 
     else:
-        return RefSet.match_euclidean(TestFiles, T)
+        names, match = RefSet.match_euclidean(TestFiles, T)
+
+        all_image = [imread(path, 1) for path in names]
+        return all_image, match, tested_image
     # if (metode==1):
     #     names2, match2 = RefSet.match_euclidean(TestFiles, T)
     #     print( 'Result images ========================================')
