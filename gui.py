@@ -12,6 +12,11 @@ imageList=[img1,img3,img2]
 imageLabel=Label(image=img1)
 imageLabel.grid(row=0,column=0,columnspan=3)
 
+textLabel=Label(text="Nama")
+textLabel.grid(row=1,column=0)
+textLabel2=Label(text="Persentase Kemiripan")
+textLabel2.grid(row=2,column=0,columnspan=2)
+
 
 def next(imageNth):
     global imageLabel
@@ -31,9 +36,14 @@ def next(imageNth):
             buttonNext=Button(window,text="-->",command=lambda:next(imageNth+1))
             buttonBack=Button(window,text="<--",command=lambda:back(imageNth-1))
     
+    
     imageLabel.grid(row=0,column=0,columnspan=3)
-    buttonBack.grid(row=1,column=0)
-    buttonNext.grid(row=1,column=2)
+    textLabel=Label(text="Nama")
+    textLabel.grid(row=1,column=0)
+    textLabel2=Label(text="Persentase Kemiripan")
+    textLabel2.grid(row=2,column=0,columnspan=2)
+    buttonBack.grid(row=3,column=0)
+    buttonNext.grid(row=3,column=2)
 
 def back(imageNth):
     global imageLabel
@@ -56,13 +66,17 @@ def back(imageNth):
             buttonBack=Button(window,text="<--",command=lambda:back(imageNth-1))
     
     imageLabel.grid(row=0,column=0,columnspan=3)
-    buttonBack.grid(row=1,column=0)
-    buttonNext.grid(row=1,column=2)
+    textLabel=Label(text="Nama")
+    textLabel.grid(row=1,column=0)
+    textLabel2=Label(text="Persentase Kemiripan")
+    textLabel2.grid(row=2,column=0,columnspan=2)
+    buttonBack.grid(row=3,column=0)
+    buttonNext.grid(row=3,column=2)
 
 buttonBack=Button(window,text= "<--",command=lambda: back(len(imageList)))
 buttonExit=Button(window,text= "Exit",command=window.quit)
 buttonNext=Button(window,text= "-->",command=lambda:next(2))
-buttonBack.grid(row=1,column=0)
-buttonExit.grid(row=1,column=1)
-buttonNext.grid(row=1,column=2)
+buttonBack.grid(row=3,column=0)
+buttonExit.grid(row=3,column=1)
+buttonNext.grid(row=3,column=2)
 window.mainloop()
