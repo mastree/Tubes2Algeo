@@ -32,9 +32,14 @@ class Window(Tk):
             b=Radiobutton(self.labelFrame,text=choice[0],variable=self.method,value=choice[1])
             b.grid(row=4,column=val*3,columnspan=3)
 
+        # spin box for how many matches
+        self.spinText=ttk.Label(self.labelFrame,text="Number of matches : ")
+        self.spinText.grid(row=5,column=1,columnspan=3)
+        self.spinLabel=ttk.Spinbox(self.labelFrame,from_=1,to=20,width=4)
+        self.spinLabel.grid(row=5,column=3,columnspan=3)
         #submit button
         self.buttonSubmit=ttk.Button(self.labelFrame,text="Send",command=self.onClicked)
-        self.buttonSubmit.grid(row=5,column=0,columnspan=6)
+        self.buttonSubmit.grid(row=6,column=0,columnspan=6)
 
     def buttonSearch(self):
         self.buttonSearch=ttk.Button(self.labelFrame,text= "Browse an Image",command=self.fileDialog)
@@ -50,7 +55,8 @@ class Window(Tk):
     def onClicked(self):
         s2=self.method.get()
         self.labelFrame.pack_forget()
-        # self.photos,self.matches,self.tested=fr.run(s2,self.filename)
+
+        # self.photos,self.matches,self.tested=fr.run(self.filename,s2,int(self.spinLabel.get()))
         
         img1= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Aaron PaulTest\Aaron Paul2_293.jpg"))
         img2= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Amaury NolascoTest\Amaury Nolasco6.jpg"))
