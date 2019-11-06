@@ -50,23 +50,26 @@ class Window(Tk):
     def onClicked(self):
         s2=self.method.get()
         self.labelFrame.pack_forget()
-        # self.photos=fr.run(s2,self.filename)
+        # self.photos,self.matches,self.tested=fr.run(s2,self.filename)
         
         img1= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Aaron PaulTest\Aaron Paul2_293.jpg"))
         img2= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Amaury NolascoTest\Amaury Nolasco6.jpg"))
         img3= ImageTk.PhotoImage(Image.open("Data\DataUji\pins_Alvaro MorteTest\Alvaro Morte16_879.jpg"))
-
-        self.photos=[img1,img2,img3]
-        
+        self.tested=img1
+        self.photos=[img1,img2,img3,img2]
+        self.matches=[1,2,3,4]
         self.showResult(1)
         
     def showResult(self,imageNth):
         
-        self.label2=Label(self,image=self.photos[imageNth-1],bg='black')
-        self.label2.grid(row=0,column=0,sticky=N+S+W+E)
+        self.label1=Label(self,image=self.tested,bg='black')
+        self.label1.grid(row=0,column=0,sticky=N+S+W)
 
-        self.textLabel=Label(self,text="Ranking : "+str(imageNth),bg='black',fg='white')
-        self.textLabel.grid(row=1,column=0,sticky=N+S+W+E)
+        self.label2=Label(self,image=self.photos[imageNth-1],bg='black')
+        self.label2.grid(row=0,column=1,sticky=N+S+E)
+
+        self.textLabel=Label(self,text="Ranking : "+str(imageNth)+" ("+str(self.matches[imageNth-1])+")",bg='black',fg='white')
+        self.textLabel.grid(row=1,column=0,columnspan=2,sticky=N+S+W+E)
         
         if(imageNth== len(self.photos)):
             self.buttonNext=Button(self ,text="Next",bg='black',fg='white',command=lambda:self.showResult(1))
@@ -80,9 +83,9 @@ class Window(Tk):
                 self.buttonBack=Button(self ,text="Prev",bg='black',fg='white',command=lambda:self.showResult(imageNth-1))
         
         self.buttonExit=Button(self ,text= "Exit",bg='black',fg='white',command=self.quit)    
-        self.buttonBack.grid(row=2,column=0,sticky=N+S+W+E)
-        self.buttonExit.grid(row=3,column=0,sticky=N+S+W+E)
-        self.buttonNext.grid(row=4,column=0,sticky=N+S+W+E)
+        self.buttonBack.grid(row=2,column=0,columnspan=2,sticky=N+S+W+E)
+        self.buttonExit.grid(row=3,column=0,columnspan=2,sticky=N+S+W+E)
+        self.buttonNext.grid(row=4,column=0,columnspan=2,sticky=N+S+W+E)
      
 if __name__=='__main__':
     window = Window()
