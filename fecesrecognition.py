@@ -9,7 +9,8 @@ import os
 import matplotlib.pyplot as plt
 import sys
 import math
-from tqdm import tqdm
+import tkinter as tkr
+import ProgressBar as PB
 
 # Feature extractor
 def extract_features(image_path, vector_size=32):
@@ -100,7 +101,9 @@ class Matcher(object):
 
         euclidean_result = np.arange(self.matrix.shape[0], dtype=float)
         i = 0
-        for vtemp in tqdm(self.matrix):
+        PB.show_progress(len(self.matrix))
+        for vtemp in (self.matrix):
+            PB.update_bar()
             euclidean_result[i] = Matcher.euclidean_distance(vtemp, v)
             i+=1
 
@@ -137,8 +140,9 @@ class Matcher(object):
 
         cosine_result = np.arange(self.matrix.shape[0], dtype=float)
         i = 0
-
-        for vtemp in tqdm(self.matrix):
+        PB.show_progress(len(self.matrix))
+        for vtemp in self.matrix:
+            PB.update_bar()
             cosine_result[i] = Matcher.cosine_distance(vtemp, v)
             i+=1
 
@@ -179,39 +183,16 @@ def run_Reference_extractor():
 # run_Reference_extractor()
 
 def find_match(TestFiles, metode, T):
-    RefSet = Matcher("features.pck")
-    tested_image = imread(path, 1)
-    # print(TestFiles)
-    # print( 'Query image ==========================================')
-    # show_img(TestFiles)
+    RefSet = Matcher("Ref_features.pck")
+    tested_image = imread(TestFiles, 1)
     if (metode==2): 
         names, match = RefSet.match_cosine(TestFiles, T)
 
         all_image = [imread(path, 1) for path in names]
         return all_image, match, tested_image
-        # names, match = RefSet.match_cosine(TestFiles, T)
-        # print( 'Result images ========================================')
-        # for i in range(T):
-        #     # we got cosine distance, cosine distance between vectors
-        #     print('Cosine======================================')
-        #     print( 'Match %s' % (match[i]))
-        #     show_img(names[i])
-        #     print(names[i])
 
     else:
         names, match = RefSet.match_euclidean(TestFiles, T)
 
         all_image = [imread(path, 1) for path in names]
         return all_image, match, tested_image
-    # if (metode==1):
-    #     names2, match2 = RefSet.match_euclidean(TestFiles, T)
-    #     print( 'Result images ========================================')
-    #     for i in range(T):
-    #         # we got euclidean distance, euclidean distance between vectors
-    #         print('Euclidean======================================')
-    #         print( 'Distance %s' % (match2[i]))
-    #         show_img(names2[i])
-    #         print(names2[i])
-
-# Contoh find_match
-# find_match("D:/_ALinGEO/Tubes2Algeo/Data/DataUji/pins_alexandra daddarioTest/alexandra daddario25.jpg", 2, 2)
