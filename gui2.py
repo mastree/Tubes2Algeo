@@ -1,11 +1,25 @@
 import fecesrecognition
 import tkinter as tk
+import gui
+
+import cv2
+import numpy as np
+import scipy
+import scipy.spatial
+from matplotlib.pyplot import imread
+import _pickle as pickle
+import random
+import os
+import matplotlib.pyplot as plt
+import sys
+import math
 # import fecesrecognition as fr
 from fecesrecognition import find_match
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox
+from gui import *
 
 methods=[
     ("Euclidean Distance",1),
@@ -44,16 +58,18 @@ class Window(Tk):
     def onClicked(self):
         s1=self.entry1.get()
         s2=self.method.get()
-        if(s1.isdigit()):
+        if(s1.isdigit() and int(s1)>0):
             s1=int(s1)
             print(s1," ",s2," ",self.filename)
-            T = int(s1)
-            metode = int(s2)
+            T = s1
+            metode = s2
             # ini contoh doang
             # bikin di dalem gui-nya rick
-            # find_match(self.filename, metode, T)
+            names, match = find_match(self.filename, metode, T)
+            show_all_image(names)
+
         else:
-            messagebox.showerror("Error","Number must be an integer! please re-input")
+            messagebox.showerror("Error","Number must be an integer(positive)! please re-input")
 
     def buttonSearch(self):
         self.buttonSearch=ttk.Button(self.labelFrame,text= "Browse an Image",command=self.fileDialog)

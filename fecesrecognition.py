@@ -9,6 +9,7 @@ import os
 import matplotlib.pyplot as plt
 import sys
 import math
+from tqdm import tqdm
 
 # Feature extractor
 def extract_features(image_path, vector_size=32):
@@ -89,7 +90,7 @@ class Matcher(object):
         for i in range(32*64):
             a = v[i] / v_norm
             b = vself[i] / vself_norm
-            res += (a - b) ** 2
+            res += (a - b) * (a - b)
         
         return math.sqrt(res)
 
@@ -99,7 +100,7 @@ class Matcher(object):
 
         euclidean_result = np.arange(self.matrix.shape[0], dtype=float)
         i = 0
-        for vtemp in self.matrix:
+        for vtemp in tqdm(self.matrix):
             euclidean_result[i] = Matcher.euclidean_distance(vtemp, v)
             i+=1
 
@@ -136,7 +137,8 @@ class Matcher(object):
 
         cosine_result = np.arange(self.matrix.shape[0], dtype=float)
         i = 0
-        for vtemp in self.matrix:
+
+        for vtemp in tqdm(self.matrix):
             cosine_result[i] = Matcher.cosine_distance(vtemp, v)
             i+=1
 
@@ -180,26 +182,29 @@ def find_match(TestFiles, metode, T):
     RefSet = Matcher("Ref_features.pck")
     print(TestFiles)
     print( 'Query image ==========================================')
-    show_img(TestFiles)
+    # show_img(TestFiles)
     if (metode==2): 
-        names, match = RefSet.match_cosine(TestFiles, T)
-        print( 'Result images ========================================')
-        for i in range(T):
-            # we got cosine distance, cosine distance between vectors
-            print('Cosine======================================')
-            print( 'Match %s' % (match[i]))
-            show_img(names[i])
-            print(names[i])
+        return RefSet.match_cosine(TestFiles, T)
+        # names, match = RefSet.match_cosine(TestFiles, T)
+        # print( 'Result images ========================================')
+        # for i in range(T):
+        #     # we got cosine distance, cosine distance between vectors
+        #     print('Cosine======================================')
+        #     print( 'Match %s' % (match[i]))
+        #     show_img(names[i])
+        #     print(names[i])
 
-    if (metode==1):
-        names2, match2 = RefSet.match_euclidean(TestFiles, T)
-        print( 'Result images ========================================')
-        for i in range(T):
-            # we got euclidean distance, euclidean distance between vectors
-            print('Euclidean======================================')
-            print( 'Distance %s' % (match2[i]))
-            show_img(names2[i])
-            print(names2[i])
+    else:
+        return RefSet.match_euclidean(TestFiles, T)
+    # if (metode==1):
+    #     names2, match2 = RefSet.match_euclidean(TestFiles, T)
+    #     print( 'Result images ========================================')
+    #     for i in range(T):
+    #         # we got euclidean distance, euclidean distance between vectors
+    #         print('Euclidean======================================')
+    #         print( 'Distance %s' % (match2[i]))
+    #         show_img(names2[i])
+    #         print(names2[i])
 
 # Contoh find_match
-# find_match("D:/_ALinGEO/Tubes2Algeo/Data/DataUji/pins_alexandra daddarioTest/alexandra daddario25.jpg", 1, 2)
+# find_match("D:/_ALinGEO/Tubes2Algeo/Data/DataUji/pins_alexandra daddarioTest/alexandra daddario25.jpg", 2, 2)
