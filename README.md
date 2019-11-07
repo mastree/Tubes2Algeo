@@ -32,7 +32,7 @@ Beberapa library di atas dapat diinstall dengan menggunakan <i>command</i>
 Beberapa library di atas merupakan library bawaan <i>Python</i>
 
 ## First time setup
-Jika anda akan menjalankan program ini untuk pertama kali, maka anda harus menjalankan fungsi `run_DataSet_extractor()` dan `run_Reference_extractor()` yang berada di file `fecesrecognition.py` untuk mengekstrak vektor-vektor yang ada di gambar ke file `Data_features.pck` dan `features.pck`
+Jika anda akan menjalankan program ini untuk pertama kali, maka anda harus menjalankan fungsi `run_DataSet_extractor()` dan `run_Reference_extractor()` yang berada di file `fecesrecognition.py` untuk mengekstrak vektor-vektor yang ada di gambar ke file `Data_features.pck` dan `Ref_features.pck`
 
 ## Cara menjalankan program
 1. Dengan menjalankan file `faceRecognition.exe`
