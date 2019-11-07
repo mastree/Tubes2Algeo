@@ -97,13 +97,13 @@ class Window(Tk):
         self.buttonNext.grid(row=4,column=0,columnspan=2,sticky=N+S+W+E)
      
     def forget(self):
-         self.label1.grid_forget()
-         self.label2.grid_forget()
-         self.textLabel.grid_forget()
-         self.buttonBack.grid_forget()
-         self.buttonExit.grid_forget()
-         self.buttonNext.grid_forget()
-         self.build()
+        self.label1.grid_forget()
+        self.label2.grid_forget()
+        self.textLabel.grid_forget()
+        self.buttonBack.grid_forget()
+        self.buttonExit.grid_forget()
+        self.buttonNext.grid_forget()
+        self.build()
 if __name__=='__main__':
     window = Window()
     Grid.rowconfigure(window,0,weight=1)
