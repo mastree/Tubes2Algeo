@@ -37,3 +37,15 @@ Jika anda akan menjalankan program ini untuk pertama kali, maka anda harus menja
 ## Cara menjalankan program
 1. Dengan menjalankan file `faceRecognition.exe`
 2. Dengan menggunakan cmd dan menjalankan perintah `python faceRecognition.py`
+
+## Langkah penggunaan
+1. Tekan tombol "Browse" untuk memasukkan gambar yang akan dijadikan referensi
+2. Pilih metode yang akan digunakan (<i>Euclidean</i> atau <i>Cosine</i>)
+3. Tentukan hasil pencocokan yang diinginkan, maksimal berupa 20 gambar
+4. Tekan tombol "Send" untuk memulai program
+5. Tunggu sampai "Progress Bar" penuh
+6. Akan muncul 2 gambar, gambar di kiri merupakan gambar referensi dan gambar di kanan merupakan gambar hasil pencocokan
+7. Tombol "Prev" untuk memunculkan gambar sebelumnya dengan tingkat kemiripan lebih besar dari gambar sekarang atau jika gambar sekarang merupakan gambar pertama maka akan memunculkan gambar terakhir
+8. Tombol "Next" untuk memunculkan gambar setelahnya dengan tingkat kemiripan lebih kecil dari gambar sekarang atau jika gambar sekarang merupakan gambar terakhir maka akan memunculkan gambar pertama
+9. Tombol "Exit" untuk keluar dari pencocokan gambar dan kembali ke tampilan awal program
+10. Tekan tombol "X" di pojok kanan atas window untuk keluar dari program
