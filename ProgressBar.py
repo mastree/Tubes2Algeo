@@ -24,7 +24,9 @@ def show_progress(max_val):
     progress["value"] = 0
     progress["maximum"] = end_value
 
-# def close_bar():
+def close_bar():
+    global progress
+    progress.pack_forget()
 #     global progress
 #     global windowkon
 

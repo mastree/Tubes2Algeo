@@ -106,6 +106,7 @@ class Matcher(object):
             PB.update_bar()
             euclidean_result[i] = Matcher.euclidean_distance(vtemp, v)
             i+=1
+        PB.close_bar()
 
         return euclidean_result.reshape(-1)
 
@@ -145,6 +146,7 @@ class Matcher(object):
             PB.update_bar()
             cosine_result[i] = Matcher.cosine_distance(vtemp, v)
             i+=1
+        PB.close_bar()
 
         return cosine_result.reshape(-1)
 
