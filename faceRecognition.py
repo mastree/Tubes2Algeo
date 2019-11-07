@@ -14,7 +14,7 @@ class Window(Tk):
     def __init__(self):
         super(Window, self).__init__()
 
-        self.title("Input Gui")
+        self.title("Face Recognition")
         self.build()
 
     def build(self):
@@ -24,11 +24,9 @@ class Window(Tk):
         self.labelFrame=ttk.LabelFrame(self,text = "Open an Image")
         self.labelFrame.grid(row=0,column=0,sticky=N+S+W+E)
         
-        #browse picture
         self.buttonSearch=ttk.Button(self.labelFrame,text= "Browse an Image",command=self.fileDialog)
         self.buttonSearch.grid(row=1,column=0,columnspan=6)
         
-        # radio button for method
         self.method=IntVar()
         self.method.set(1)
         self.radioLabel=ttk.Label(self.labelFrame,text="Choose your method : ")
@@ -37,13 +35,11 @@ class Window(Tk):
             b=Radiobutton(self.labelFrame,text=choice[0],variable=self.method,value=choice[1])
             b.grid(row=4,column=val*3,columnspan=3)
 
-        # spin box for how many matches
         self.spinText=ttk.Label(self.labelFrame,text="Number of matches : ")
         self.spinText.grid(row=5,column=0,columnspan=3)
         self.spinLabel=ttk.Spinbox(self.labelFrame,from_=1,to=20,width=4)
         self.spinLabel.grid(row=5,column=3,columnspan=3)
         
-        #submit button
         self.buttonSubmit=ttk.Button(self.labelFrame,text="Send",command=self.onClicked)
         self.buttonSubmit.grid(row=6,column=0,columnspan=6)
 
@@ -68,28 +64,34 @@ class Window(Tk):
         else:
             messagebox.showerror('Error','Please re-check your input')        
     def showResult(self,imageNth):
+        self.picFrame = ttk.Frame(self)
+        self.picFrame.grid(row = 0, column = 0, sticky = N + S + W + E)
         
-        self.label1=Label(self,image=self.tested,bg='black')
+        self.label1=Label(self.picFrame,image=self.tested,bg='black')
         self.label1.grid(row=0,column=0,sticky=N+S+W+E)
 
-        self.label2=Label(self,image=self.photos[imageNth-1],bg='black')
+        self.label2=Label(self.picFrame,image=self.photos[imageNth-1],bg='black')
         self.label2.grid(row=0,column=1,sticky=N+S+E+W)
 
-        self.textLabel=Label(self,text="Ranking : "+str(imageNth)+" ("+str(self.matches[imageNth-1])+")",bg='black',fg='white')
+        self.textLabel=Label(self.picFrame,text="Ranking : "+str(imageNth)+" ("+str(self.matches[imageNth-1])+")",bg='black',fg='white')
         self.textLabel.grid(row=1,column=0,columnspan=2,sticky=N+S+W+E)
         
-        if(imageNth== len(self.photos)):
-            self.buttonNext=Button(self ,text="Next",bg='black',fg='white',command=lambda:self.showResult(1))
-            self.buttonBack=Button(self ,text="Prev",bg='black',fg='white',command=lambda:self.showResult(imageNth-1))
-        else: 
-            if(imageNth == 1):
-                self.buttonNext=Button(self ,text="Next",bg='black',fg='white',command=lambda:self.showResult(imageNth+1))
-                self.buttonBack=Button(self ,text="Prev",bg='black',fg='white',command=lambda:self.showResult(len(self.photos)))
-            else:
-                self.buttonNext=Button(self ,text="Next",bg='black',fg='white',command=lambda:self.showResult(imageNth+1))
-                self.buttonBack=Button(self ,text="Prev",bg='black',fg='white',command=lambda:self.showResult(imageNth-1))
+        if(len(self.photos)==1):
+            self.buttonNext=Button(self.picFrame ,text="Next",bg='black',fg='white',command=lambda:self.showResult(1))
+            self.buttonBack=Button(self.picFrame ,text="Prev",bg='black',fg='white',command=lambda:self.showResult(1))
+        else:
+            if(imageNth== len(self.photos)):
+                self.buttonNext=Button(self.picFrame ,text="Next",bg='black',fg='white',command=lambda:self.showResult(1))
+                self.buttonBack=Button(self.picFrame ,text="Prev",bg='black',fg='white',command=lambda:self.showResult(imageNth-1))
+            else: 
+                if(imageNth == 1):
+                    self.buttonNext=Button(self.picFrame ,text="Next",bg='black',fg='white',command=lambda:self.showResult(imageNth+1))
+                    self.buttonBack=Button(self.picFrame ,text="Prev",bg='black',fg='white',command=lambda:self.showResult(len(self.photos)))
+                else:
+                    self.buttonNext=Button(self.picFrame ,text="Next",bg='black',fg='white',command=lambda:self.showResult(imageNth+1))
+                    self.buttonBack=Button(self.picFrame ,text="Prev",bg='black',fg='white',command=lambda:self.showResult(imageNth-1))
         
-        self.buttonExit=Button(self ,text= "Exit",bg='black',fg='white',command=lambda:self.forget())    
+        self.buttonExit=Button(self.picFrame ,text= "Exit",bg='black',fg='white',command=lambda:self.forget())    
         self.buttonBack.grid(row=2,column=0,columnspan=2,sticky=N+S+W+E)
         self.buttonExit.grid(row=3,column=0,columnspan=2,sticky=N+S+W+E)
         self.buttonNext.grid(row=4,column=0,columnspan=2,sticky=N+S+W+E)

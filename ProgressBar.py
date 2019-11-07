@@ -2,7 +2,6 @@ import tkinter.ttk as tkrtk
 import tkinter as tkr
 
 end_value = 100
-# progress = tkrtk.Progressbar(None)
 
 def update_bar():
     global progress
@@ -26,8 +25,6 @@ def show_progress(max_val):
 
 def close_bar():
     global progress
-    progress.pack_forget()
-#     global progress
-#     global windowkon
-
-#     windowkon.quit()
+    global windowkon
+    
+    windowkon.destroy()

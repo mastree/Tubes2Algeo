@@ -12,30 +12,19 @@ import math
 import tkinter as tkr
 import ProgressBar as PB
 
-# Feature extractor
 def extract_features(image_path, vector_size=32):
     image = imread(image_path, 1)
     try:
         alg = cv2.KAZE_create()
-        # Finding image keypoints
         kps = alg.detect(image)
-        # Getting first 32 of them. 
-        # Number of keypoints is varies depend on image size and color pallet
-        # Sorting them based on keypoint response value(bigger is better)
         kps = sorted(kps, key=lambda x: -x.response)[:vector_size]
-        # computing descriptors vector
         kps, dsc = alg.compute(image, kps)
-        # Flatten all of them in one big vector - our feature vector
-        if dsc is None: # Handling NULL object
+        if dsc is None:
             return None
         
         dsc = dsc.flatten()
-        # Making descriptor of same size
-        # Descriptor vector size is 64
         needed_size = (vector_size * 64)
         if dsc.size < needed_size:
-            # if we have less the 32 descriptors then just adding zeros at the
-            # end of our feature vector
             dsc = np.concatenate([dsc, np.zeros(needed_size - dsc.size)])
     except cv2.error as e:
         print( 'Error: ', e)
@@ -57,7 +46,6 @@ def batch_extractor(images_path, pickled_db_path):
             if temp is not None:
                 result[name] = temp
     
-    # saving all our feature vectors in pickled file
     with open(pickled_db_path, 'wb') as fp:
         pickle.dump(result, fp)
 
@@ -81,7 +69,7 @@ class Matcher(object):
         res = 0
         v_norm = 0
         vself_norm = 0
-        for i in range(32*64): # There are 32*64 keypoints
+        for i in range(32*64):
             v_norm += v[i] * v[i]
             vself_norm += vself[i] * vself[i]
 
@@ -96,7 +84,6 @@ class Matcher(object):
         return math.sqrt(res)
 
     def euclidean_vector(self, vector):
-        # getting euclidean distance between search image and images database
         v = vector.reshape(-1)
 
         euclidean_result = np.arange(self.matrix.shape[0], dtype=float)
@@ -126,7 +113,7 @@ class Matcher(object):
         res = 0
         v_norm = 0
         vself_norm = 0
-        for i in range(32*64): # There are 32*64 keypoints
+        for i in range(32*64):
             res += v[i] * vself[i]
             v_norm += v[i] * v[i]
             vself_norm += vself[i] * vself[i]
@@ -136,7 +123,6 @@ class Matcher(object):
         return res / (v_norm * vself_norm)
 
     def cosine_vector(self, vector):
-        # getting cosine similarity between search image and images database
         v = vector.reshape(-1)
 
         cosine_result = np.arange(self.matrix.shape[0], dtype=float)
@@ -176,13 +162,7 @@ def run_Reference_extractor():
     relative_path = '\\Data\\Referensi'
     Ref_images_path = os.path.dirname(Ref_images_path) + relative_path
     Ref_files = [os.path.join(Ref_images_path, p) for p in sorted(os.listdir(Ref_images_path))]
-    # getting 3 random images 
-    # sample = random.sample(files, 3)
     batch_extractor(Ref_images_path, "Ref_features.pck")
-
-# Run these to get the file packages
-# run_DataSet_extractor()
-# run_Reference_extractor()
 
 def find_match(TestFiles, metode, T):
     RefSet = Matcher("Ref_features.pck")
